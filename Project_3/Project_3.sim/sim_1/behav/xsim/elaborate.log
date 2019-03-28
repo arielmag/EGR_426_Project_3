@@ -13,6 +13,9 @@ Compiling package ieee.std_logic_1164
 Compiling package ieee.std_logic_arith
 Compiling package ieee.std_logic_unsigned
 Compiling package ieee.numeric_std
+Compiling architecture behavioral of entity xil_defaultlib.bcd_sevenseg [bcd_sevenseg_default]
+Compiling architecture behavioral of entity xil_defaultlib.sevenseg_mux [sevenseg_mux_default]
+Compiling architecture behavioral of entity xil_defaultlib.clk_divider [clk_divider_default]
 Compiling architecture a of entity xil_defaultlib.alu [alu_default]
 Compiling architecture a of entity xil_defaultlib.microram_sim [microram_sim_default]
 Compiling architecture a of entity xil_defaultlib.cpu [cpu_default]

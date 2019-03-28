@@ -2,12 +2,12 @@
 # Vivado v2018.2 (64-bit)
 # SW Build 2258646 on Thu Jun 14 20:03:12 MDT 2018
 # IP Build 2256618 on Thu Jun 14 22:10:49 MDT 2018
-# Start of session at: Thu Mar 28 00:44:15 2019
-# Process ID: 16520
-# Current directory: C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1
+# Start of session at: Thu Mar 28 13:03:36 2019
+# Process ID: 11536
+# Current directory: C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1
 # Command line: vivado.exe -log cpuram.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source cpuram.tcl
-# Log file: C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1/cpuram.vds
-# Journal file: C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1\vivado.jou
+# Log file: C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1/cpuram.vds
+# Journal file: C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1\vivado.jou
 #-----------------------------------------------------------
 source cpuram.tcl -notrace
 Command: synth_design -top cpuram -part xc7a35tcpg236-1 -mode out_of_context
@@ -15,11 +15,11 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 15672 
+INFO: Helper process launched with PID 10404 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 387.422 ; gain = 99.676
+Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 387.883 ; gain = 99.633
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'cpuram' [c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/synth/cpuram.vhd:69]
+INFO: [Synth 8-638] synthesizing module 'cpuram' [c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/synth/cpuram.vhd:69]
 	Parameter C_FAMILY bound to: artix7 - type: string 
 	Parameter C_XDEVICEFAMILY bound to: artix7 - type: string 
 	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
@@ -38,8 +38,8 @@ INFO: [Synth 8-638] synthesizing module 'cpuram' [c:/Users/ariel/OneDrive/Docume
 	Parameter C_LOAD_INIT_FILE bound to: 1 - type: integer 
 	Parameter C_INIT_FILE_NAME bound to: cpuram.mif - type: string 
 	Parameter C_INIT_FILE bound to: cpuram.mem - type: string 
-	Parameter C_USE_DEFAULT_DATA bound to: 0 - type: integer 
-	Parameter C_DEFAULT_DATA bound to: 0 - type: string 
+	Parameter C_USE_DEFAULT_DATA bound to: 1 - type: integer 
+	Parameter C_DEFAULT_DATA bound to: F0 - type: string 
 	Parameter C_HAS_RSTA bound to: 0 - type: integer 
 	Parameter C_RST_PRIORITY_A bound to: CE - type: string 
 	Parameter C_RSTRAM_A bound to: 0 - type: integer 
@@ -93,8 +93,8 @@ INFO: [Synth 8-638] synthesizing module 'cpuram' [c:/Users/ariel/OneDrive/Docume
 	Parameter C_COUNT_36K_BRAM bound to: 0 - type: string 
 	Parameter C_COUNT_18K_BRAM bound to: 1 - type: string 
 	Parameter C_EST_POWER_SUMMARY bound to: Estimated Power for IP     :     2.54005 mW - type: string 
-INFO: [Synth 8-3491] module 'blk_mem_gen_v8_4_1' declared at 'c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd:195313' bound to instance 'U0' of component 'blk_mem_gen_v8_4_1' [c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/synth/cpuram.vhd:232]
-INFO: [Synth 8-256] done synthesizing module 'cpuram' (9#1) [c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/synth/cpuram.vhd:69]
+INFO: [Synth 8-3491] module 'blk_mem_gen_v8_4_1' declared at 'c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd:195313' bound to instance 'U0' of component 'blk_mem_gen_v8_4_1' [c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/synth/cpuram.vhd:232]
+INFO: [Synth 8-256] done synthesizing module 'cpuram' (9#1) [c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/synth/cpuram.vhd:69]
 WARNING: [Synth 8-3331] design blk_mem_gen_prim_wrapper_init has unconnected port SSRA
 WARNING: [Synth 8-3331] design blk_mem_gen_prim_wrapper_init has unconnected port CLKB
 WARNING: [Synth 8-3331] design blk_mem_gen_prim_wrapper_init has unconnected port SSRB
@@ -197,7 +197,7 @@ WARNING: [Synth 8-3331] design blk_mem_input_block has unconnected port DINB[7]
 WARNING: [Synth 8-3331] design blk_mem_input_block has unconnected port DINB[6]
 INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:01:00 ; elapsed = 00:01:03 . Memory (MB): peak = 652.598 ; gain = 364.852
+Finished RTL Elaboration : Time (s): cpu = 00:00:55 ; elapsed = 00:00:57 . Memory (MB): peak = 651.605 ; gain = 363.355
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -210,10 +210,10 @@ Report Check Netlist:
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:01:01 ; elapsed = 00:01:03 . Memory (MB): peak = 652.598 ; gain = 364.852
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:55 ; elapsed = 00:00:58 . Memory (MB): peak = 651.605 ; gain = 363.355
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:01:01 ; elapsed = 00:01:03 . Memory (MB): peak = 652.598 ; gain = 364.852
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:55 ; elapsed = 00:00:58 . Memory (MB): peak = 651.605 ; gain = 363.355
 ---------------------------------------------------------------------------------
 INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -222,35 +222,35 @@ INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
-Parsing XDC File [c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/cpuram_ooc.xdc] for cell 'U0'
-Finished Parsing XDC File [c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/cpuram_ooc.xdc] for cell 'U0'
-Parsing XDC File [C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1/dont_touch.xdc]
-Finished Parsing XDC File [C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1/dont_touch.xdc]
+Parsing XDC File [c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/cpuram_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/cpuram_ooc.xdc] for cell 'U0'
+Parsing XDC File [C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
 
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.045 . Memory (MB): peak = 694.242 ; gain = 1.313
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 694.371 ; gain = 1.379
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:01:10 ; elapsed = 00:01:14 . Memory (MB): peak = 694.242 ; gain = 406.496
+Finished Constraint Validation : Time (s): cpu = 00:01:04 ; elapsed = 00:01:08 . Memory (MB): peak = 694.371 ; gain = 406.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:01:10 ; elapsed = 00:01:14 . Memory (MB): peak = 694.242 ; gain = 406.496
+Finished Loading Part and Timing Information : Time (s): cpu = 00:01:04 ; elapsed = 00:01:08 . Memory (MB): peak = 694.371 ; gain = 406.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
-Applied set_property DONT_TOUCH = true for U0. (constraint file  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1/dont_touch.xdc, line 9).
+Applied set_property DONT_TOUCH = true for U0. (constraint file  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1/dont_touch.xdc, line 9).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:01:10 ; elapsed = 00:01:14 . Memory (MB): peak = 694.242 ; gain = 406.496
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:01:04 ; elapsed = 00:01:08 . Memory (MB): peak = 694.371 ; gain = 406.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:01:10 ; elapsed = 00:01:15 . Memory (MB): peak = 694.242 ; gain = 406.496
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:01:04 ; elapsed = 00:01:08 . Memory (MB): peak = 694.371 ; gain = 406.121
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -286,7 +286,7 @@ Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 Warning: Parallel synthesis criteria is not met 
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:11 ; elapsed = 00:01:15 . Memory (MB): peak = 694.242 ; gain = 406.496
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:04 ; elapsed = 00:01:09 . Memory (MB): peak = 694.371 ; gain = 406.121
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -298,13 +298,13 @@ Report RTL Partitions:
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:20 ; elapsed = 00:01:25 . Memory (MB): peak = 743.137 ; gain = 455.391
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:13 ; elapsed = 00:01:19 . Memory (MB): peak = 742.348 ; gain = 454.098
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:20 ; elapsed = 00:01:25 . Memory (MB): peak = 743.277 ; gain = 455.531
+Finished Timing Optimization : Time (s): cpu = 00:01:13 ; elapsed = 00:01:19 . Memory (MB): peak = 742.496 ; gain = 454.246
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -316,7 +316,7 @@ Report RTL Partitions:
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:20 ; elapsed = 00:01:25 . Memory (MB): peak = 743.277 ; gain = 455.531
+Finished Technology Mapping : Time (s): cpu = 00:01:13 ; elapsed = 00:01:19 . Memory (MB): peak = 742.563 ; gain = 454.313
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -340,7 +340,7 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished IO Insertion : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -353,7 +353,7 @@ Report Check Netlist:
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -365,25 +365,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -415,11 +415,11 @@ Report Instance Areas:
 |7     |            \prim_init.ram                   |blk_mem_gen_prim_wrapper_init |     1|
 +------+---------------------------------------------+------------------------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.410 ; gain = 456.664
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.070 ; gain = 455.820
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 148 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:14 ; elapsed = 00:01:18 . Memory (MB): peak = 744.410 ; gain = 415.020
-Synthesis Optimization Complete : Time (s): cpu = 00:01:21 ; elapsed = 00:01:26 . Memory (MB): peak = 744.414 ; gain = 456.664
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:13 ; elapsed = 00:01:12 . Memory (MB): peak = 744.070 ; gain = 413.055
+Synthesis Optimization Complete : Time (s): cpu = 00:01:14 ; elapsed = 00:01:20 . Memory (MB): peak = 744.074 ; gain = 455.820
 INFO: [Project 1-571] Translating synthesized netlist
 INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
@@ -431,13 +431,13 @@ No Unisim elements were transformed.
 INFO: [Common 17-83] Releasing license: Synthesis
 17 Infos, 100 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:01:23 ; elapsed = 00:01:28 . Memory (MB): peak = 764.953 ; gain = 488.680
+synth_design: Time (s): cpu = 00:01:16 ; elapsed = 00:01:22 . Memory (MB): peak = 764.691 ; gain = 487.906
 WARNING: [Constraints 18-5210] No constraint will be written out.
-INFO: [Common 17-1381] The checkpoint 'C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1/cpuram.dcp' has been generated.
-INFO: [Coretcl 2-1482] Added synthesis output to IP cache for IP c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/ip/cpuram/cpuram.xci
+INFO: [Common 17-1381] The checkpoint 'C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1/cpuram.dcp' has been generated.
+INFO: [Coretcl 2-1482] Added synthesis output to IP cache for IP c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/ip/cpuram/cpuram.xci
 INFO: [Coretcl 2-1174] Renamed 6 cell refs.
 WARNING: [Constraints 18-5210] No constraint will be written out.
-INFO: [Common 17-1381] The checkpoint 'C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1/cpuram.dcp' has been generated.
+INFO: [Common 17-1381] The checkpoint 'C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1/cpuram.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file cpuram_utilization_synth.rpt -pb cpuram_utilization_synth.pb
-report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.078 . Memory (MB): peak = 767.742 ; gain = 0.000
-INFO: [Common 17-206] Exiting Vivado at Thu Mar 28 00:45:52 2019...
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.027 . Memory (MB): peak = 767.480 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Thu Mar 28 13:05:05 2019...

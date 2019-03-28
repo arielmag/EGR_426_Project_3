@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/cpuram_synth_1'
+HD_PWD='C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/cpuram_synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

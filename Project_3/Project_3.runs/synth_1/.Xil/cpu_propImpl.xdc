@@ -1,4 +1,4 @@
-set_property SRC_FILE_INFO {cfile:C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc rfile:../../../Project_3.srcs/constrs_1/new/cpu_pins.xdc id:1} [current_design]
+set_property SRC_FILE_INFO {cfile:C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc rfile:../../../Project_3.srcs/constrs_1/new/cpu_pins.xdc id:1} [current_design]
 set_property src_info {type:XDC file:1 line:2 export:INPUT save:INPUT read:READ} [current_design]
 set_property PACKAGE_PIN T18 [get_ports clk]
 set_property src_info {type:XDC file:1 line:8 export:INPUT save:INPUT read:READ} [current_design]

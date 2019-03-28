@@ -1,38 +1,5 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/16/2017 05:54:30 PM
--- Design Name: 
--- Module Name: microram_sim - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
--- This file simulates a 512x8 synchronous RAM component.
--- The program to be executed is encoded by initializing the "mem_data" signal (see below).
---
 
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
@@ -54,10 +21,10 @@ type t_mem_data is array(0 to 511) of std_logic_vector(7 downto 0);
 -- Your program is entered here, as initialization values for the "mem_data" signal.
 signal mem_data : t_mem_data := (0 => "11110000", -- CLR A (dummy first instruction)
                                  1 => "00000000", -- LOAD 9,A  
-                                 2 => X"09",      -- ADDRESS -> 9
+                                 2 => "00001001",      -- ADDRESS -> 9
 	                             3 => "00011000", -- BCD OUT A  
 	                             4 => "00000001", -- LOAD 10,B  
-	                             5 => X"0A",      -- ADDRESS -> 10
+	                             5 => x"0A",      -- ADDRESS -> 10
 	                             6 => "00011001", -- BCD OUT B  
 	                           	 7 => "10000000", -- ADD A 
 	                             8 => "00011000", -- BCD OUT A         

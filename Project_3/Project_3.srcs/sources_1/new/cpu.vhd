@@ -292,12 +292,12 @@ case CurrState is
 						        Exc_IOWrite <= '1';
 						
 					      when "0001100"|"0001101" =>          -- BCD R,P
-                                      if(IR(0) = '0') then
-                                         DATA <= STD_LOGIC_VECTOR(A);
-                                      else
-                                         DATA <= STD_LOGIC_VECTOR(B);
-                                      end if;
-                                      Exc_BCDWrite <= '1';
+                                if(IR(0) = '0') then
+                                    DATA <= STD_LOGIC_VECTOR(A);
+                                else
+                                    DATA <= STD_LOGIC_VECTOR(B);
+                                end if;
+                                Exc_BCDWrite <= '1';
                           						
 					      when "0000110"|"0000111" =>	         -- IN P,R
 						        if(IR(1) = '0') then

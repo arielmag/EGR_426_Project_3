@@ -23,20 +23,20 @@ create_project -in_memory -part xc7a35tcpg236-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.cache/wt [current_project]
-set_property parent.project_path C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.xpr [current_project]
+set_property webtalk.parent_dir C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.cache/wt [current_project]
+set_property parent.project_path C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.cache/ip [current_project]
+set_property ip_output_repo c:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-add_files c:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/testfile.coe
+add_files C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/testfile.coe
 read_vhdl -library xil_defaultlib {
-  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/new/alu.vhd
-  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/new/bcd_sevenseg.vhd
-  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/new/clk_divider.vhd
-  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/new/microram_sim.vhd
-  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/new/sevenseg_mux.vhd
-  C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/sources_1/new/cpu.vhd
+  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/new/alu.vhd
+  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/new/bcd_sevenseg.vhd
+  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/new/clk_divider.vhd
+  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/new/microram_sim.vhd
+  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/new/sevenseg_mux.vhd
+  C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/sources_1/new/cpu.vhd
 }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -46,8 +46,8 @@ read_vhdl -library xil_defaultlib {
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc
-set_property used_in_implementation false [get_files C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc]
+read_xdc C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc
+set_property used_in_implementation false [get_files C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc]
 
 set_param ips.enableIPCacheLiteLoad 0
 close [open __synthesis_is_running__ w]

@@ -69,12 +69,12 @@ set rc [catch {
   create_project -in_memory -part xc7a35tcpg236-1
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
-  set_property webtalk.parent_dir C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.cache/wt [current_project]
-  set_property parent.project_path C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.xpr [current_project]
-  set_property ip_output_repo C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.cache/ip [current_project]
+  set_property webtalk.parent_dir C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.cache/wt [current_project]
+  set_property parent.project_path C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.xpr [current_project]
+  set_property ip_output_repo C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
-  add_files -quiet C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.runs/synth_1/cpu.dcp
-  read_xdc C:/Users/ariel/OneDrive/Documents/GVSU/EGR_426/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc
+  add_files -quiet C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.runs/synth_1/cpu.dcp
+  read_xdc C:/Users/ariel/OneDrive/Documents/GitHub/EGR_426_Project_3/Project_3/Project_3.srcs/constrs_1/new/cpu_pins.xdc
   link_design -top cpu -part xc7a35tcpg236-1
   close_msg_db -file init_design.pb
 } RESULT]
