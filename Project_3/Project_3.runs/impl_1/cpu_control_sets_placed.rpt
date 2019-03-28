@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date         : Thu Mar 28 13:36:26 2019
+| Date         : Thu Mar 28 17:27:22 2019
 | Host         : LAPTOP-VHI018SI running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file cpu_control_sets_placed.rpt
 | Design       : cpu
@@ -50,7 +50,7 @@ Table of Contents
 | No           | No                    | Yes                    |              42 |            8 |
 | No           | Yes                   | No                     |               2 |            1 |
 | Yes          | No                    | No                     |               0 |            0 |
-| Yes          | No                    | Yes                    |             194 |           31 |
+| Yes          | No                    | Yes                    |             194 |           36 |
 | Yes          | Yes                   | No                     |               0 |            0 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
@@ -63,13 +63,13 @@ Table of Contents
 +-----------------------+---------------------+-------------------------+------------------+----------------+
 |  C1/seg_out_reg[6]    |                     | MUX1/seg_select_i_1_n_0 |                1 |              2 |
 |  clk_IBUF             |                     | reset_IBUF              |                2 |              4 |
-|  clk_IBUF             | B                   | reset_IBUF              |                3 |             16 |
+|  clk_IBUF             | IR[7]_i_1_n_0       | reset_IBUF              |                2 |             16 |
+|  clk_IBUF             | B                   | reset_IBUF              |                5 |             16 |
 |  clk_IBUF             | A                   | reset_IBUF              |                5 |             16 |
-|  clk_IBUF             | IR                  | reset_IBUF              |                3 |             16 |
-|  clk_IBUF             | MDR                 | reset_IBUF              |                2 |             16 |
-|  clk_IBUF             | Outport0[7]_i_1_n_0 | reset_IBUF              |                2 |             16 |
-|  clk_IBUF             | Outport1[7]_i_1_n_0 | reset_IBUF              |                2 |             16 |
-|  clk_IBUF             | left_data           | reset_IBUF              |                4 |             16 |
+|  clk_IBUF             | Outport0[7]_i_1_n_0 | reset_IBUF              |                5 |             16 |
+|  clk_IBUF             | MDR                 | reset_IBUF              |                3 |             16 |
+|  clk_IBUF             | Outport1[7]_i_1_n_0 | reset_IBUF              |                3 |             16 |
+|  clk_IBUF             | left_data           | reset_IBUF              |                3 |             16 |
 |  C1/seg_out_reg[6]    |                     |                         |                3 |             18 |
 |  clk_IBUF             | U2/E[0]             | reset_IBUF              |                2 |             18 |
 |  clk_100Mhz_IBUF_BUFG |                     | reset_IBUF              |                6 |             38 |

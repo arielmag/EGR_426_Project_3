@@ -52,16 +52,7 @@ component sevenseg_mux is
 end component;
 
 -- ------------ Declare the 512x8 RAM component --------------
---component microram is
---port (  CLOCK   : in STD_LOGIC ;
---		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
---		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
---		DATAIN  : in STD_LOGIC_VECTOR (7 downto 0);
---		WE	: in STD_LOGIC 
---	 );
---end component;
-
-component microram_sim is
+component microram is
 port (  CLOCK   : in STD_LOGIC ;
 		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
 		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
@@ -69,6 +60,15 @@ port (  CLOCK   : in STD_LOGIC ;
 		WE	: in STD_LOGIC 
 	 );
 end component;
+
+--component microram_sim is
+--port (  CLOCK   : in STD_LOGIC ;
+--		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
+--		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
+--		DATAIN  : in STD_LOGIC_VECTOR (7 downto 0);
+--		WE	: in STD_LOGIC 
+--	 );
+--end component;
 -- ---------- Declare signals interfacing to RAM ---------------
 signal RAM_DATA_OUT : STD_LOGIC_VECTOR(7 downto 0);  -- DATAOUT output of RAM
 signal ADDR : STD_LOGIC_VECTOR(8 downto 0);	         -- ADDRESS input of RAM
@@ -132,9 +132,9 @@ U1 : alu PORT MAP (ALU_A, ALU_B, ALU_FUNC, ALU_OUT, ALU_N, ALU_V, ALU_Z);
 ALU_FUNC <= IR(6 downto 4);
 	
 -- ------------ Instantiate the RAM component -------------
---U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
-U2 : microram_sim PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+--U2 : microram_sim PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
 -- ---------------- Generate RAM write enable ---------------------
 -- The address and data are presented to the RAM during the Memory phase, 
@@ -226,9 +226,6 @@ begin
 					     if(Exc_BCDWrite = '1') then   -- Write to Outport0 and OutPort1 and display on seven segment
                                left_data <= DATA(7 downto 4);
                                right_data <= DATA(3 downto 0);
-                               
-                               Outport0 <= "0" & not right_seg;
-                               Outport1 <= "0" & not left_seg;
                          end if;
 					
 			when Others => CurrState <= Fetch;
@@ -318,5 +315,7 @@ case CurrState is
 				    end case;
 		end case;	
 end process;
+
+
 
 end a;
