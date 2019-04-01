@@ -115,6 +115,10 @@ signal clk_divide : STD_LOGIC;
 signal left_seg, right_seg : STD_LOGIC_VECTOR (6 downto 0);
 signal left_data, right_data : STD_LOGIC_VECTOR (3 downto 0);
 
+-- ---------- DEB -----------
+constant COUNT_MAX : integer := 3000000;    -- 3 sec
+signal COUNT : integer := COUNT_MAX;        -- current count
+
 begin
 -- ------------ Instantiate the Seven-Segment BCD Component -------------
 BCD1 : bcd_sevenseg PORT MAP (LED_Number => left_data, Seg_out => left_seg);
@@ -310,12 +314,44 @@ case CurrState is
 						
 					      when "0000010"|"0000011" =>	       -- STOR R,M
 						        null;
+						  
+						  when "1010100" | "1010101" =>        -- DEB R, M
+                               if COUNT = 0 then
+                                  if IR(0) = '0' then
+                                      A <= "00000001";
+                                  else
+                                      B <= "00000001";
+                                  end if;
+                               else
+                                  if IR(0) = '0' then
+                                      A <= "00000000";
+                                  else
+                                      B <= "00000000";
+                                  end if;
+                               end if;
+                               Exc_RegWrite <= '1';
 								
 					      when others => null;
 				    end case;
 		end case;	
 end process;
 
-
+-- for debounce --
+process(CLK, RESET)
+begin
+    if IR(1) = '0' then
+        if Inport0(0) = '1' then
+            COUNT <= COUNT_MAX;
+        else
+            COUNT <= COUNT - 1;
+        end if;
+    else
+        if Inport0(1) = '1' then
+            COUNT <= COUNT_MAX;
+        else
+            COUNT <= COUNT - 1;
+        end if;
+    end if;
+end process;
 
 end a;

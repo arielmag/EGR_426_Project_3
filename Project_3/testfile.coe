@@ -15,6 +15,10 @@ memory_initialization_vector =
 00011000
 00000111
 00000011
+10101000
+10101001
+10101010
+10101011
 ;
 
 
@@ -31,3 +35,7 @@ memory_initialization_vector =
 ; 8) BCD0 A
 ; 9) 0x07
 ;10) 0x03
+;11) DEB0 A
+;12) DEB0 B
+;13) DEB1 A
+;14) DEB1 B

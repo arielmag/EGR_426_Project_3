@@ -31,6 +31,10 @@ signal mem_data : t_mem_data := (0 => "11110000", -- CLR A (dummy first instruct
 	                    	 -- test data --
                                 9 => "00000111", -- memory location 9 set to 7
                                 10 => "00000011", -- memory location 10 set to 3
+--                                11 => "10101000", -- DEB0 A
+--                                12 => "10101001", -- DEB0 B
+--                                13 => "10101010", -- DEB1 A
+--                                14 => "10101011", -- DEB1 B
                             others => "11110000"); -- all other memory locations set to CLR A instr
 
 begin
