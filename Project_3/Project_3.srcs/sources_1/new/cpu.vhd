@@ -2,8 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 LIBRARY IEEE;
-USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
+USE IEEE.std_logic_1164.all;
+USE IEEE.std_logic_arith.all;
+USE IEEE.std_logic_unsigned.all;
 
 entity cpu is
 PORT(clk, clk_100Mhz : in STD_LOGIC;
@@ -29,14 +30,30 @@ signal ALU_FUNC : STD_LOGIC_VECTOR(2 downto 0);
 signal ALU_OUT : SIGNED(7 downto 0);
 signal ALU_N, ALU_V, ALU_Z : STD_LOGIC;
 
+-- ------------ Declare Clear-bit component --------------------
+component Clear_bit is
+    port(
+            BitX : in STD_LOGIC_VECTOR(2 downto 0);     -- bit to clear
+            MemIn : in STD_LOGIC_VECTOR(7 downto 0);    -- memory data
+            MemOut : out STD_LOGIC_VECTOR(7 downto 0)   -- result
+        );
+end component;
+
+-- ------------ Declare signals interfacing to Clear Bit -------------
+signal ClearBit : STD_LOGIC_VECTOR(2 downto 0);
+signal ClearOut : STD_LOGIC_VECTOR(7 downto 0);
+signal ClearIn : STD_LOGIC_VECTOR(7 downto 0);
+
 -- ------------ Declare Seven-Segment BCD Component -------------
 component bcd_sevenseg is
     Port (LED_Number : in STD_LOGIC_VECTOR(3 downto 0);
           Seg_out : out STD_LOGIC_VECTOR (6 downto 0));
 end component;
 
-
 -- ------------ Declare signals interfacing to Seven-Segment BCD -------------
+signal clk_divide : STD_LOGIC;
+signal left_seg, right_seg : STD_LOGIC_VECTOR (6 downto 0);
+signal left_data, right_data : STD_LOGIC_VECTOR (3 downto 0);
 
 -- ------------ Declare Clock Divider Component -------------
 component clk_divider is
@@ -110,14 +127,12 @@ signal Exc_RegWrite : STD_LOGIC;        -- Latch data bus in A or B
 signal Exc_CCWrite : STD_LOGIC;         -- Latch ALU status bits in CCR
 signal Exc_IOWrite : STD_LOGIC;         -- Latch data bus in I/O
 signal Exc_BCDWrite : STD_LOGIC;         -- Latch data bus in BCD
-
-signal clk_divide : STD_LOGIC;
-signal left_seg, right_seg : STD_LOGIC_VECTOR (6 downto 0);
-signal left_data, right_data : STD_LOGIC_VECTOR (3 downto 0);
+signal Exc_CLRWrite : STD_LOGIC;        -- Latch data bus in CLRB
 
 -- ---------- DEB -----------
-constant COUNT_MAX : integer := 3000000;    -- 3 sec
-signal COUNT : integer := COUNT_MAX;        -- current count
+constant COUNT_MAX : integer := 3;          -- 3 sec
+signal COUNT0 : integer := COUNT_MAX;       -- current count on 0 bit
+signal COUNT1 : integer := COUNT_MAX;       -- current count on 1 bit
 
 begin
 -- ------------ Instantiate the Seven-Segment BCD Component -------------
@@ -128,6 +143,9 @@ MUX1: sevenseg_mux PORT MAP (left_seg => left_seg, right_seg => right_seg, clk =
     reset => reset, anode_out => anode_out, seg_out => seg_out);
 
 C1: clk_divider PORT MAP (clk => clk_100Mhz, reset => reset, clkout => clk_divide);
+
+-- ------------ Instantiate the Clear Bit Component ----------------------
+CLRB : clear_bit PORT MAP(MemIn => ClearIn, MemOut => ClearOut, BitX => ClearBit);
     
 -- ------------ Instantiate the ALU component ---------------
 U1 : alu PORT MAP (ALU_A, ALU_B, ALU_FUNC, ALU_OUT, ALU_N, ALU_V, ALU_Z);
@@ -230,7 +248,14 @@ begin
 					     if(Exc_BCDWrite = '1') then   -- Write to Outport0 and OutPort1 and display on seven segment
                                left_data <= DATA(7 downto 4);
                                right_data <= DATA(3 downto 0);
-                         end if;
+                         end if;                         
+                         
+                        if(Exc_CLRWrite = '1') then    -- clear bit in mem location
+                            ClearIn <= STD_LOGIC_VECTOR(A);
+                            ClearBit <= DATA(2 downto 0);
+                            B <= SIGNED(ClearOut);     -- write result to B
+                            -- store back in mem location and update z and n
+                        end if;
 					
 			when Others => CurrState <= Fetch;
 		end case;
@@ -245,6 +270,7 @@ Exc_RegWrite <= '0';
 Exc_CCWrite <= '0';
 Exc_IOWrite <= '0';
 Exc_BCDWrite <= '0';
+Exc_CLRWrite <= '0';
 
 -- Same idea
 ALU_A <= A;
@@ -311,25 +337,23 @@ case CurrState is
 					      when "0000000"|"0000001" =>          -- LOAD M,R
 						        DATA <= RAM_DATA_OUT;
 						        Exc_RegWrite <= '1';
+						        
+						  when "1101100" | "1101101" |        -- CLRB M, B
+						          "1101110" | "1101111" => 
+						      Exc_CLRWrite <= '1';            -- CLRB
 						
 					      when "0000010"|"0000011" =>	       -- STOR R,M
 						        null;
 						  
 						  when "1010100" | "1010101" =>        -- DEB R, M
-                               if COUNT = 0 then
-                                  if IR(0) = '0' then
-                                      A <= "00000001";
-                                  else
-                                      B <= "00000001";
-                                  end if;
-                               else
-                                  if IR(0) = '0' then
-                                      A <= "00000000";
-                                  else
-                                      B <= "00000000";
-                                  end if;
-                               end if;
-                               Exc_RegWrite <= '1';
+						      if IR(1) = '0' and COUNT0 = 0 then
+						          DATA <= "00000001";
+						      elsif IR(1) = '1' and COUNT1 = 0 then
+						          DATA <= "00000001";
+						      else
+						          DATA <= "00000000";
+						      end if;
+                              Exc_RegWrite <= '1';
 								
 					      when others => null;
 				    end case;
@@ -339,18 +363,18 @@ end process;
 -- for debounce --
 process(CLK, RESET)
 begin
-    if IR(1) = '0' then
-        if Inport0(0) = '1' then
-            COUNT <= COUNT_MAX;
-        else
-            COUNT <= COUNT - 1;
-        end if;
+    -- debounce bit 0
+    if Inport0(0) = '1' then
+        COUNT0 <= COUNT_MAX;
     else
-        if Inport0(1) = '1' then
-            COUNT <= COUNT_MAX;
-        else
-            COUNT <= COUNT - 1;
-        end if;
+        COUNT0 <= COUNT0 - 1;
+    end if;
+    
+    -- debounce bit 1
+    if Inport0(1) = '1' then
+        COUNT1 <= COUNT_MAX;
+    else
+        COUNT1 <= COUNT1 - 1;
     end if;
 end process;
 
