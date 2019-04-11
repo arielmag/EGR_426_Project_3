@@ -315,7 +315,11 @@ case CurrState is
 						        Exc_RegWrite <= '1';
 						
 					      when "0000010"|"0000011" =>	       -- STOR R,M
-						        null;
+                                if(IR(0) = '0') then
+                                      DATA <= STD_LOGIC_VECTOR(A);
+                                  else
+                                      DATA <= STD_LOGIC_VECTOR(B);
+                                  end if;
 								
                         when "1010100" | "1010101" =>        -- DEB R, M
                             if IR(1) = '0' and COUNT0 = 0 then

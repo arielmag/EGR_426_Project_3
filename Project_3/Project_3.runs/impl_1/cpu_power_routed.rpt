@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-| Date             : Thu Apr  4 20:19:26 2019
+| Date             : Wed Apr 10 21:45:08 2019
 | Host             : LAPTOP-VHI018SI running 64-bit major release  (build 9200)
 | Command          : report_power -file cpu_power_routed.rpt -pb cpu_power_summary_routed.pb -rpx cpu_power_routed.rpx
 | Design           : cpu
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+----------------------------------+
-| Total On-Chip Power (W)  | 36.077 (Junction temp exceeded!) |
+| Total On-Chip Power (W)  | 35.811 (Junction temp exceeded!) |
 | Design Power Budget (W)  | Unspecified*                     |
 | Power Budget Margin (W)  | NA                               |
-| Dynamic (W)              | 35.590                           |
+| Dynamic (W)              | 35.325                           |
 | Device Static (W)        | 0.486                            |
 | Effective TJA (C/W)      | 5.0                              |
 | Max Ambient (C)          | 0.0                              |
@@ -52,17 +52,17 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Slice Logic    |     1.965 |      653 |       --- |             --- |
-|   LUT as Logic |     1.721 |      322 |     20800 |            1.55 |
-|   CARRY4       |     0.164 |       39 |      8150 |            0.48 |
-|   Register     |     0.074 |      192 |     41600 |            0.46 |
+| Slice Logic    |     1.898 |      653 |       --- |             --- |
+|   LUT as Logic |     1.658 |      324 |     20800 |            1.56 |
+|   CARRY4       |     0.162 |       39 |      8150 |            0.48 |
+|   Register     |     0.073 |      192 |     41600 |            0.46 |
 |   BUFG         |     0.006 |        1 |        32 |            3.13 |
 |   Others       |     0.000 |       12 |       --- |             --- |
-| Signals        |     2.682 |      526 |       --- |             --- |
+| Signals        |     2.621 |      525 |       --- |             --- |
 | Block RAM      |     0.128 |      0.5 |        50 |            1.00 |
-| I/O            |    30.815 |       46 |       106 |           43.40 |
+| I/O            |    30.678 |       46 |       106 |           43.40 |
 | Static Power   |     0.486 |          |           |                 |
-| Total          |    36.077 |          |           |                 |
+| Total          |    35.811 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -72,9 +72,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     5.179 |       4.838 |      0.341 |
-| Vccaux    |       1.800 |     1.180 |       1.127 |      0.053 |
-| Vcco33    |       3.300 |     8.702 |       8.701 |      0.001 |
+| Vccint    |       1.000 |     5.050 |       4.709 |      0.341 |
+| Vccaux    |       1.800 |     1.175 |       1.122 |      0.053 |
+| Vcco33    |       3.300 |     8.664 |       8.663 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |
@@ -139,18 +139,18 @@ Table of Contents
 +------------------------------------------------+-----------+
 | Name                                           | Power (W) |
 +------------------------------------------------+-----------+
-| cpu                                            |    35.590 |
-|   C1                                           |     0.183 |
-|   MUX1                                         |     0.261 |
-|   U1                                           |     1.074 |
-|   U2                                           |     1.050 |
-|     U1                                         |     0.200 |
-|       U0                                       |     0.200 |
-|         inst_blk_mem_gen                       |     0.200 |
-|           gnbram.gnativebmg.native_blk_mem_gen |     0.200 |
-|             valid.cstr                         |     0.200 |
-|               ramloop[0].ram.r                 |     0.200 |
-|                 prim_init.ram                  |     0.200 |
+| cpu                                            |    35.325 |
+|   C1                                           |     0.182 |
+|   MUX1                                         |     0.264 |
+|   U1                                           |     1.026 |
+|   U2                                           |     1.009 |
+|     U1                                         |     0.204 |
+|       U0                                       |     0.204 |
+|         inst_blk_mem_gen                       |     0.204 |
+|           gnbram.gnativebmg.native_blk_mem_gen |     0.204 |
+|             valid.cstr                         |     0.204 |
+|               ramloop[0].ram.r                 |     0.204 |
+|                 prim_init.ram                  |     0.204 |
 +------------------------------------------------+-----------+
 
 
