@@ -29,6 +29,20 @@ signal ALU_FUNC : STD_LOGIC_VECTOR(2 downto 0);
 signal ALU_OUT : SIGNED(7 downto 0);
 signal ALU_N, ALU_V, ALU_Z : STD_LOGIC;
 
+-- ------------ Declare Clear-Bit Component --------------------
+component Clear_bit is
+    port(
+            BitX : in STD_LOGIC_VECTOR(2 downto 0);     -- bit to clear
+            MemIn : in STD_LOGIC_VECTOR(7 downto 0);    -- memory data
+            MemOut : out STD_LOGIC_VECTOR(7 downto 0)   -- result
+        );
+end component;
+
+-- ------------ Declare signals for clear-bit component --------
+signal bitToClear : STD_LOGIC_VECTOR(2 downto 0);
+signal memData : STD_LOGIC_VECTOR(7 downto 0);
+signal bitCleared : STD_LOGIC_VECTOR(7 downto 0);
+
 -- ------------ Declare Seven-Segment BCD Component -------------
 component bcd_sevenseg is
     Port (LED_Number : in STD_LOGIC_VECTOR(3 downto 0);
@@ -103,6 +117,24 @@ begin
   end if;
  return RETVAL;
 end function;
+
+-- -----------------------------------------------------
+-- This function returns TRUE if the given op code is a
+-- 6-phase instruction
+-- -----------------------------------------------------	
+function Is6Phase(constant DATA : STD_LOGIC_VECTOR(7 downto 0)) return BOOLEAN is
+variable MSB5 : STD_LOGIC_VECTOR(4 downto 0);
+variable RETVAL : BOOLEAN;
+begin
+  MSB5 := DATA(7 downto 3);
+  if(MSB5 = "11011") or (MSB5 = "11010") then
+	 RETVAL := true;
+  else
+	 RETVAL := false;
+  end if;
+ return RETVAL;
+end function;
+
 	
 -- --------- Declare variables that indicate which registers are to be written --------
 -- --------- from the DATA bus at the start of the next Fetch cycle. ------------------
@@ -110,10 +142,16 @@ signal Exc_RegWrite : STD_LOGIC;        -- Latch data bus in A or B
 signal Exc_CCWrite : STD_LOGIC;         -- Latch ALU status bits in CCR
 signal Exc_IOWrite : STD_LOGIC;         -- Latch data bus in I/O
 signal Exc_BCDWrite : STD_LOGIC;         -- Latch data bus in BCD
+signal Exc_CLRBit : STD_LOGIC;          -- Latch data bus in ClrBit
 
 signal clk_divide : STD_LOGIC;
 signal left_seg, right_seg : STD_LOGIC_VECTOR (6 downto 0);
 signal left_data, right_data : STD_LOGIC_VECTOR (3 downto 0);
+
+-- ---------- flag ----------
+signal flag6 : STD_LOGIC := '0';            -- flag for if it is 6 phase or not
+signal memFlag : STD_LOGIC := '0';          -- flag for execute again or not
+--signal exCount : integer := 0;              -- counts number of executes gone through
 
 -- ---------- DEB -----------
 constant COUNT_MAX : integer := 3;          -- 3 sec
@@ -130,6 +168,9 @@ MUX1: sevenseg_mux PORT MAP (left_seg => left_seg, right_seg => right_seg, clk =
     reset => reset, anode_out => anode_out, seg_out => seg_out);
 
 C1: clk_divider PORT MAP (clk => clk_100Mhz, reset => reset, clkout => clk_divide);
+
+-- ------------ Instantiate Clear Bit component -------------
+CLRB : clear_bit PORT MAP (BITX => bitToClear, MemIn => memData, MemOut => bitCleared);
     
 -- ------------ Instantiate the ALU component ---------------
 U1 : alu PORT MAP (ALU_A, ALU_B, ALU_FUNC, ALU_OUT, ALU_N, ALU_V, ALU_Z);
@@ -147,7 +188,8 @@ U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, 
 -- hence this is when we need to set RAM_WE high.
 process (CurrState,IR)
 begin
-  if((CurrState = Memory) and (IR(7 downto 2) = "000001")) then
+  -- STOR or CLRB second memory access
+  if ((CurrState = Memory) and ((IR(7 downto 2) = "000001") or (IR(7 downto 3) = "01101" and memFlag = '1'))) then
 	  RAM_WE <= '1';
   else
 	  RAM_WE <= '0';
@@ -190,6 +232,11 @@ begin
 						   PC <= PC + 1;
 						   temp := temp + 1;
 						   CurrState <= Operand;
+						elsif(Is6Phase(DATA)) then
+						   PC <= PC + 1;
+						   temp := temp + 1;
+						   CurrState <= Operand;
+						   flag6 <= '1';
 					    else
 						   CurrState <= Execute;
 					    end if;
@@ -205,20 +252,29 @@ begin
 					        PC <= PC + 1;
 					        temp := temp +1;
 					     end if;
-					     CurrState <= Fetch;
+					     
+					     if (flag6 = '1' and memFlag = '1') then     -- if 6 phase go to mem state
+					       CurrState <= Memory;
+					       if memFlag = '1' then     -- if this is our second execute
+					           flag6 <= '0';
+					           memFlag <= '0';
+					       end if;
+					     else
+					       CurrState <= Fetch;
+					     end if;
 					
 					     if(Exc_RegWrite = '1') then   -- Writing result to A or B
-						    if(IR(0) = '0') then
-							   A <= SIGNED(DATA);
-						    else
-							   B <= SIGNED(DATA);
-						    end if;
+                            if(IR(0) = '0') then
+                               A <= SIGNED(DATA);
+                            else
+                               B <= SIGNED(DATA);
+                            end if;
 					     end if;
 					
 					     if(Exc_CCWrite = '1') then    -- Updating flag bits
-						    V <= ALU_V;
-						    N <= ALU_N;
-						    Z <= ALU_Z;
+                            V <= ALU_V;
+                            N <= ALU_N;
+                            Z <= ALU_Z;
 					     end if;
 
 					     if(Exc_IOWrite = '1') then    -- Write to Outport0 or OutPort1
@@ -232,6 +288,13 @@ begin
 					     if(Exc_BCDWrite = '1') then   -- Write to Outport0 and OutPort1 and display on seven segment
                                left_data <= DATA(7 downto 4);
                                right_data <= DATA(3 downto 0);
+                         end if;
+                         
+                         if (Exc_ClrBit = '1') then -- Clear bit
+                            bitToClear <= IR(2 downto 0);   -- bit to clear
+                            memData <= DATA(7 downto 0);    -- mem data
+                            A <= SIGNED(bitCleared);        -- data out read into A
+                            memFlag <= '1'; -- move to second phase of mem/execute
                          end if;
 					
 			when Others => CurrState <= Fetch;
@@ -247,6 +310,7 @@ Exc_RegWrite <= '0';
 Exc_CCWrite <= '0';
 Exc_IOWrite <= '0';
 Exc_BCDWrite <= '0';
+Exc_ClrBit <= '0';
 
 -- Same idea
 ALU_A <= A;
@@ -311,7 +375,7 @@ case CurrState is
 						        Exc_RegWrite <= '1';
 						
 					      when "0000000"|"0000001" =>          -- LOAD M,R
-						        DATA <= RAM_DATA_OUT;
+						        DATA <= RAM_DATA_OUT;         -- mem in location
 						        Exc_RegWrite <= '1';
 						
 					      when "0000010"|"0000011" =>	       -- STOR R,M
@@ -320,8 +384,19 @@ case CurrState is
                                   else
                                       DATA <= STD_LOGIC_VECTOR(B);
                                   end if;
-								
-                        when "1010100" | "1010101" =>        -- DEB R, M
+                                
+                            -- opcode 01101XXX
+                          when "0110100" | "0110101" | "0110110" | "0110111" =>
+                                if (memFlag = '0') then
+                                    DATA <= RAM_DATA_OUT;       
+                                    Exc_ClrBit <= '1';              -- CLR Bit
+                                elsif (memFlag = '1') then
+                                    DATA <= "10101010";
+                                    Exc_CCWrite <= '1';             -- update flags accordingly
+                                    --DATA <= STD_LOGIC_VECTOR(A);    -- STOR A
+                                end if;
+                          							
+                          when "1010100" | "1010101" =>        -- DEB R, M
                             if IR(1) = '0' and COUNT0 = 0 then
                               DATA <= "00000001";
                             elsif IR(1) = '1' and COUNT1 = 0 then
