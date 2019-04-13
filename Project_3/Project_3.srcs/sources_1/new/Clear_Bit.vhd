@@ -3,6 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Clear_bit is
     port(
+            CLK : in STD_LOGIC;
             BitX : in STD_LOGIC_VECTOR(2 downto 0);     -- bit to clear
             MemIn : in STD_LOGIC_VECTOR(7 downto 0);    -- memory data
             MemOut : out STD_LOGIC_VECTOR(7 downto 0)   -- result
@@ -16,7 +17,7 @@ signal tmp : STD_LOGIC_VECTOR(7 downto 0);
 
 begin
 
-process(BitX, MemIn)
+process(BitX, MemIn, CLK)
 begin
         case BitX is
             when "000" => toAnd <= "11111110";
@@ -31,7 +32,7 @@ begin
         end case;
 end process;
 
-process (toAnd, MemIn) is
+process (toAnd, MemIn, CLK) is
 begin
     for I in 7 downto 0 loop
         tmp(I) <= toAnd(I) and MemIn(I);

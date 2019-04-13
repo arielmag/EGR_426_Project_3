@@ -32,6 +32,7 @@ signal ALU_N, ALU_V, ALU_Z : STD_LOGIC;
 -- ------------ Declare Clear-Bit Component --------------------
 component Clear_bit is
     port(
+            CLK : in STD_LOGIC;
             BitX : in STD_LOGIC_VECTOR(2 downto 0);     -- bit to clear
             MemIn : in STD_LOGIC_VECTOR(7 downto 0);    -- memory data
             MemOut : out STD_LOGIC_VECTOR(7 downto 0)   -- result
@@ -66,16 +67,7 @@ component sevenseg_mux is
 end component;
 
 -- ------------ Declare the 512x8 RAM component --------------
-component microram is
-port (  CLOCK   : in STD_LOGIC ;
-		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
-		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
-		DATAIN  : in STD_LOGIC_VECTOR (7 downto 0);
-		WE	: in STD_LOGIC 
-	 );
-end component;
-
---component microram_sim is
+--component microram is
 --port (  CLOCK   : in STD_LOGIC ;
 --		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
 --		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
@@ -83,13 +75,22 @@ end component;
 --		WE	: in STD_LOGIC 
 --	 );
 --end component;
+
+component decmsz_tb is
+port (  CLOCK   : in STD_LOGIC ;
+		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
+		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
+		DATAIN  : in STD_LOGIC_VECTOR (7 downto 0);
+		WE	: in STD_LOGIC 
+	 );
+end component;
 -- ---------- Declare signals interfacing to RAM ---------------
 signal RAM_DATA_OUT : STD_LOGIC_VECTOR(7 downto 0);  -- DATAOUT output of RAM
 signal ADDR : STD_LOGIC_VECTOR(8 downto 0);	         -- ADDRESS input of RAM
 signal RAM_WE : STD_LOGIC;
 
 -- ---------- Declare the state names and state variable -------------
-type STATE_TYPE is (Fetch, Operand, Memory, Execute);
+type STATE_TYPE is (Fetch, Operand, Memory, Execute, Memory2, Execute2);
 signal CurrState : STATE_TYPE;
 -- ---------- Declare the internal CPU registers -------------------
 signal PC : UNSIGNED(8 downto 0);
@@ -127,7 +128,7 @@ variable MSB5 : STD_LOGIC_VECTOR(4 downto 0);
 variable RETVAL : BOOLEAN;
 begin
   MSB5 := DATA(7 downto 3);
-  if(MSB5 = "11011") or (MSB5 = "11010") then
+  if(MSB5 = "01101") or (MSB5 = "01101") or (MSB5 = "11111") then
 	 RETVAL := true;
   else
 	 RETVAL := false;
@@ -143,6 +144,7 @@ signal Exc_CCWrite : STD_LOGIC;         -- Latch ALU status bits in CCR
 signal Exc_IOWrite : STD_LOGIC;         -- Latch data bus in I/O
 signal Exc_BCDWrite : STD_LOGIC;         -- Latch data bus in BCD
 signal Exc_CLRBit : STD_LOGIC;          -- Latch data bus in ClrBit
+signal Exc_SkipIns : STD_LOGIC;
 
 signal clk_divide : STD_LOGIC;
 signal left_seg, right_seg : STD_LOGIC_VECTOR (6 downto 0);
@@ -170,7 +172,7 @@ MUX1: sevenseg_mux PORT MAP (left_seg => left_seg, right_seg => right_seg, clk =
 C1: clk_divider PORT MAP (clk => clk_100Mhz, reset => reset, clkout => clk_divide);
 
 -- ------------ Instantiate Clear Bit component -------------
-CLRB : clear_bit PORT MAP (BITX => bitToClear, MemIn => memData, MemOut => bitCleared);
+CLRB : clear_bit PORT MAP (CLK => CLK, BITX => IR(2 downto 0), MemIn => DATA(7 downto 0), MemOut => bitCleared);
     
 -- ------------ Instantiate the ALU component ---------------
 U1 : alu PORT MAP (ALU_A, ALU_B, ALU_FUNC, ALU_OUT, ALU_N, ALU_V, ALU_Z);
@@ -179,9 +181,9 @@ U1 : alu PORT MAP (ALU_A, ALU_B, ALU_FUNC, ALU_OUT, ALU_N, ALU_V, ALU_Z);
 ALU_FUNC <= IR(6 downto 4);
 	
 -- ------------ Instantiate the RAM component -------------
-U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+--U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
---U2 : microram_sim PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+U2 : decmsz_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
 -- ---------------- Generate RAM write enable ---------------------
 -- The address and data are presented to the RAM during the Memory phase, 
@@ -189,7 +191,8 @@ U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, 
 process (CurrState,IR)
 begin
   -- STOR or CLRB second memory access
-  if ((CurrState = Memory) and ((IR(7 downto 2) = "000001") or (IR(7 downto 3) = "01101" and memFlag = '1'))) then
+  if ((CurrState = Memory and IR(7 downto 2) = "000001") or (IR(7 downto 3) = "01101" and CurrState = Memory2) or
+        (IR(7 downto 3) = "11111" and CurrState = Memory2)) then
 	  RAM_WE <= '1';
   else
 	  RAM_WE <= '0';
@@ -202,6 +205,8 @@ with CurrState select
 			 STD_LOGIC_VECTOR(PC) when Operand,  -- really a don't care
 			 IR(1) & MDR when Memory,
 			 STD_LOGIC_VECTOR(PC) when Execute,
+			 IR(1) & MDR when Memory2,
+			 STD_LOGIC_VECTOR(PC) when Execute2,
 			 STD_LOGIC_VECTOR(PC) when others;   -- just to be safe
 				
 -- --------------------------------------------------------------------
@@ -228,7 +233,16 @@ begin
   elsif(rising_edge(clk)) then
 	 case CurrState is
 		  when Fetch => IR <= DATA;
-					    if(Is4Phase(DATA)) then
+		                if (Exc_SkipIns = '1') then
+		                  if (Is4Phase(DATA) or Is6Phase(DATA)) then
+		                      PC <= PC + 2;
+		                      temp := temp + 2;
+		                  else
+		                      PC <= PC + 1;
+		                      temp := temp + 1;
+		                  end if;
+		                  CurrState <= Fetch;
+		                elsif(Is4Phase(DATA)) then
 						   PC <= PC + 1;
 						   temp := temp + 1;
 						   CurrState <= Operand;
@@ -245,21 +259,35 @@ begin
 					     CurrState <= Memory;
 
 		 when Memory => CurrState <= Execute;
+		 
+		 when Memory2 => CurrState <= Execute2;
+		 
+		 when Execute2 => if(temp = 2) then 
+                              PC <= "000000010";
+                           else
+                              PC <= PC + 1;
+                              temp := temp +1;
+                           end if;
+                           
+                           CurrState <= Fetch;
+                           
+                           if(Exc_CCWrite = '1') then    -- Updating flag bits
+                               V <= ALU_V;
+                               N <= ALU_N;
+                               Z <= ALU_Z;
+                           end if;                           
 					
-		 when Execute => if(temp = 2) then 
-		                    PC <= "000000010";
+		 when Execute =>    
+					     if (flag6 = '1') then     -- if 6 phase go to mem state
+					       CurrState <= Memory2;
+					       flag6 <= '0';
 					     else
-					        PC <= PC + 1;
-					        temp := temp +1;
-					     end if;
-					     
-					     if (flag6 = '1' and memFlag = '1') then     -- if 6 phase go to mem state
-					       CurrState <= Memory;
-					       if memFlag = '1' then     -- if this is our second execute
-					           flag6 <= '0';
-					           memFlag <= '0';
-					       end if;
-					     else
+                             if(temp = 2) then 
+                                 PC <= "000000010";
+                              else
+                                 PC <= PC + 1;
+                                 temp := temp +1;
+                              end if;
 					       CurrState <= Fetch;
 					     end if;
 					
@@ -291,11 +319,9 @@ begin
                          end if;
                          
                          if (Exc_ClrBit = '1') then -- Clear bit
-                            bitToClear <= IR(2 downto 0);   -- bit to clear
-                            memData <= DATA(7 downto 0);    -- mem data
                             A <= SIGNED(bitCleared);        -- data out read into A
-                            memFlag <= '1'; -- move to second phase of mem/execute
                          end if;
+                         
 					
 			when Others => CurrState <= Fetch;
 		end case;
@@ -320,13 +346,29 @@ ALU_B <= B;
 DATA <= RAM_DATA_OUT;
 
 case CurrState is
-	 when Fetch | Operand => DATA <= RAM_DATA_OUT;
+	 when Fetch | Operand =>
+	                       Exc_SkipIns <= '0';
+	                       DATA <= RAM_DATA_OUT;
 						
-	 when Memory => if(IR(0) = '0') then
+	 when Memory | Memory2 => if(IR(0) = '0') then
 					   DATA <= STD_LOGIC_VECTOR(A);
 				    else
 					   DATA <= STD_LOGIC_VECTOR(B);
 				    end if;
+	
+	 when Execute2 => case IR(7 downto 1) is
+	                      when "0110100" | "0110101" | "0110110" | "0110111" =>
+                              --DATA <= "10101010";
+                              Exc_CCWrite <= '1';             -- update flags accordingly
+                              DATA <= STD_LOGIC_VECTOR(A);    -- STOR A
+                          when "1111100" =>
+                              if (DATA = "00000000") then
+                                Exc_SkipIns <= '1';
+                              else
+                                Exc_SkipIns <= '0';
+                              end if;
+                          when others => null;
+                          end case;
 				
 	 when Execute => case IR(7 downto 1) is
 					      when "1000000" 			-- ADD R
@@ -386,15 +428,17 @@ case CurrState is
                                   end if;
                                 
                             -- opcode 01101XXX
-                          when "0110100" | "0110101" | "0110110" | "0110111" =>
-                                if (memFlag = '0') then
-                                    DATA <= RAM_DATA_OUT;       
-                                    Exc_ClrBit <= '1';              -- CLR Bit
-                                elsif (memFlag = '1') then
-                                    DATA <= "10101010";
-                                    Exc_CCWrite <= '1';             -- update flags accordingly
-                                    --DATA <= STD_LOGIC_VECTOR(A);    -- STOR A
-                                end if;
+                          when "0110100" | "0110101" | "0110110" | "0110111" => -- CLR Bit
+                            if (memFlag = '0') then
+                                DATA <= RAM_DATA_OUT;
+                                Exc_ClrBit <= '1';                  
+                            end if;
+                            
+                          when "1111100" =>                         -- DECMSZ
+                            if (memFlag = '0') then
+                                DATA <= SIGNED(RAM_DATA_OUT) - 1;
+                                Exc_RegWrite <= '1';                -- write it to A
+                            end if;
                           							
                           when "1010100" | "1010101" =>        -- DEB R, M
                             if IR(1) = '0' and COUNT0 = 0 then

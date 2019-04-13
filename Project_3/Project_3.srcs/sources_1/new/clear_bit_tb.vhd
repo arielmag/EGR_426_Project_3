@@ -6,16 +6,16 @@ USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_arith.all;
 USE IEEE.std_logic_unsigned.all;
 
-entity microram_sim is
+entity clear_bit_tb is
 port (  CLOCK   : in STD_LOGIC ;
 		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
 		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
 		DATAIN  : in STD_LOGIC_VECTOR (7 downto 0);
 		WE	: in STD_LOGIC 
 	);
-end entity microram_sim;
+end entity clear_bit_tb;
 
-architecture a of microram_sim is
+architecture a of clear_bit_tb is
 type t_mem_data is array(0 to 511) of std_logic_vector(7 downto 0);
 
 -- Your program is entered here, as initialization values for the "mem_data" signal.
