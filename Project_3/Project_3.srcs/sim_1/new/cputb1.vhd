@@ -26,7 +26,7 @@ end component;
 signal clk : std_logic := '0';
 signal clk_100Mhz : std_logic := '0';
 signal reset : std_logic := '1';
-signal Inport0 : std_logic_vector(7 downto 0) := (others => '0');
+signal Inport0 : std_logic_vector(7 downto 0) := "00000010";
 signal Inport1 : std_logic_vector(7 downto 0) := (others => '0');
 
 --Outputs
