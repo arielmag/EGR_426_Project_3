@@ -76,7 +76,7 @@ end component;
 --	 );
 --end component;
 
-component bcd_tb is
+component decmsz_tb is
 port (  CLOCK   : in STD_LOGIC ;
 		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
 		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
@@ -90,7 +90,7 @@ signal ADDR : STD_LOGIC_VECTOR(8 downto 0);	         -- ADDRESS input of RAM
 signal RAM_WE : STD_LOGIC;
 
 -- ---------- Declare the state names and state variable -------------
-type STATE_TYPE is (Fetch, Operand, Memory, Execute, Memory2, Execute2);
+type STATE_TYPE is (Fetch, Operand, Memory, Execute, Memory2, Execute2, Skip);
 signal CurrState : STATE_TYPE;
 -- ---------- Declare the internal CPU registers -------------------
 signal PC : UNSIGNED(8 downto 0);
@@ -183,7 +183,7 @@ ALU_FUNC <= IR(6 downto 4);
 -- ------------ Instantiate the RAM component -------------
 --U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
-U2 : bcd_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+U2 : decmsz_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
 -- ---------------- Generate RAM write enable ---------------------
 -- The address and data are presented to the RAM during the Memory phase, 
@@ -241,7 +241,7 @@ begin
 		                      PC <= PC + 1;
 		                      temp := temp + 1;
 		                  end if;
-		                  CurrState <= Fetch;
+		                  CurrState <= Skip;
 		                elsif(Is4Phase(DATA)) then
 						   PC <= PC + 1;
 						   temp := temp + 1;
@@ -254,6 +254,8 @@ begin
 					    else
 						   CurrState <= Execute;
 					    end if;
+	
+	     when Skip => CurrState <= Fetch;
 
 		 when Operand => MDR <= DATA;
 					     CurrState <= Memory;
@@ -347,8 +349,10 @@ DATA <= RAM_DATA_OUT;
 
 case CurrState is
 	 when Fetch | Operand =>
-	                       Exc_SkipIns <= '0';
 	                       DATA <= RAM_DATA_OUT;
+	                      -- Exc_SkipIns <= '0';
+	                      
+	 when Skip => Exc_SkipIns <= '0';
 						
 	 when Memory | Memory2 => if(IR(0) = '0') then
 					   DATA <= STD_LOGIC_VECTOR(A);
