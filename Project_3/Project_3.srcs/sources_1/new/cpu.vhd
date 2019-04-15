@@ -76,7 +76,7 @@ end component;
 --	 );
 --end component;
 
-component debounce_tb is
+component bcd_tb is
 port (  CLOCK   : in STD_LOGIC ;
 		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
 		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
@@ -183,7 +183,7 @@ ALU_FUNC <= IR(6 downto 4);
 -- ------------ Instantiate the RAM component -------------
 --U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
-U2 : debounce_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+U2 : bcd_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
 -- ---------------- Generate RAM write enable ---------------------
 -- The address and data are presented to the RAM during the Memory phase, 
@@ -400,7 +400,7 @@ case CurrState is
 						        end if;
 						        Exc_IOWrite <= '1';
 						
-					      when "0001100"|"0001101" =>          -- BCD R,P
+					      when "0001100" =>          -- BCD R,P
                                 if(IR(0) = '0') then
                                     DATA <= STD_LOGIC_VECTOR(A);
                                 else
