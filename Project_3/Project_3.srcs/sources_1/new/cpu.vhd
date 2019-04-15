@@ -1,9 +1,7 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
 LIBRARY IEEE;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
+--USE ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
 
 entity cpu is
 PORT(clk, clk_100Mhz : in STD_LOGIC;
@@ -44,6 +42,13 @@ signal bitToClear : STD_LOGIC_VECTOR(2 downto 0);
 signal memData : STD_LOGIC_VECTOR(7 downto 0);
 signal bitCleared : STD_LOGIC_VECTOR(7 downto 0);
 
+-- ------------ Declare signals for pwm component --------
+signal count_on_top : integer;
+signal count_off_top : integer;
+signal dc : SIGNED(7 downto 0) := x"00";
+signal count_on : integer := 0;
+signal count_off : integer := 0;
+
 -- ------------ Declare Seven-Segment BCD Component -------------
 component bcd_sevenseg is
     Port (LED_Number : in STD_LOGIC_VECTOR(3 downto 0);
@@ -76,7 +81,16 @@ end component;
 --	 );
 --end component;
 
-component bcd_tb is
+--component bcd_tb is
+--port (  CLOCK   : in STD_LOGIC ;
+--		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
+--		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
+--		DATAIN  : in STD_LOGIC_VECTOR (7 downto 0);
+--		WE	: in STD_LOGIC 
+--	 );
+--end component;
+
+component pwm_tb is
 port (  CLOCK   : in STD_LOGIC ;
 		ADDRESS	: in STD_LOGIC_VECTOR (8 downto 0);
 		DATAOUT : out STD_LOGIC_VECTOR (7 downto 0);
@@ -84,6 +98,7 @@ port (  CLOCK   : in STD_LOGIC ;
 		WE	: in STD_LOGIC 
 	 );
 end component;
+
 -- ---------- Declare signals interfacing to RAM ---------------
 signal RAM_DATA_OUT : STD_LOGIC_VECTOR(7 downto 0);  -- DATAOUT output of RAM
 signal ADDR : STD_LOGIC_VECTOR(8 downto 0);	         -- ADDRESS input of RAM
@@ -183,7 +198,9 @@ ALU_FUNC <= IR(6 downto 4);
 -- ------------ Instantiate the RAM component -------------
 --U2 : microram PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
-U2 : bcd_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+--U2 : bcd_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
+
+U2 : pwm_tb PORT MAP (CLOCK => clk, ADDRESS => ADDR, DATAOUT => RAM_DATA_OUT, DATAIN => DATA, WE => RAM_WE);
 
 -- ---------------- Generate RAM write enable ---------------------
 -- The address and data are presented to the RAM during the Memory phase, 
@@ -226,7 +243,7 @@ begin
 	 Z <= '0';
 	 V <= '0';
 	 Outport0 <= (others => '0');
-	 Outport1 <= (others => '0');
+	 Outport1(6 downto 0) <= (others => '0');
 	 temp := 0;
 	 left_data <= (others => '0');
 	 right_data <= (others => '0');
@@ -309,7 +326,7 @@ begin
 						    if(IR(1) = '0') then
 							   Outport0 <= DATA;
 						    else
-							   Outport1 <= DATA;
+							   Outport1(6 downto 0) <= DATA(6 downto 0);
 						    end if;
 					     end if;
 					     
@@ -436,7 +453,7 @@ case CurrState is
                             
                           when "1111100" =>                         -- DECMSZ
                             if (memFlag = '0') then
-                                DATA <= SIGNED(RAM_DATA_OUT) - 1;
+                                DATA <= std_logic_vector(SIGNED(RAM_DATA_OUT) - 1);
                                 Exc_RegWrite <= '1';                -- write it to A
                             end if;
                           							
@@ -450,6 +467,23 @@ case CurrState is
                             end if;
                             Exc_RegWrite <= '1';
 								
+					      when "0101100" =>          -- PWMD R
+                              if(IR(0) = '0') then
+                              
+                                -- Set PWM to 0 if > 100
+                                if(STD_LOGIC_VECTOR(A) > x"64") then
+                                    dc <= x"00";
+                                else
+                                    dc <= A;
+                                 end if;
+                              else
+                                    -- Set PWM to 0 if > 100
+                                  if(STD_LOGIC_VECTOR(B) > x"64") then
+                                      dc <= x"00";
+                                  else
+                                      dc <= B;
+                                   end if;
+                              end if;
 								
 					      when others => null;
 				    end case;
@@ -487,5 +521,27 @@ begin
    end if;
 end process;
 
+
+process(clk_divide,dc)
+begin
+
+if(rising_edge(clk_divide)) then
+    if(count_on < count_on_top) then
+        count_on <= count_on + 1;
+        Outport1(7) <= '1';
+    elsif(count_off < count_off_top) then
+        count_off <= count_off + 1;
+        Outport1(7) <= '0';
+    else
+        count_on <= 0;
+        count_off <= 0;
+        Outport1(7) <= '0';
+    end if;
+end if;
+end process;
+
+count_off_top <= to_integer(1000 - dc*10);
+
+count_on_top <= to_integer(dc * 10);
 
 end a;

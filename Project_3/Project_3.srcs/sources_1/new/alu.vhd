@@ -33,7 +33,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 LIBRARY IEEE;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
+--USE ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
+
 
 entity alu is
 port(A, B : in SIGNED(7 downto 0);
