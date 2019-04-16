@@ -159,6 +159,7 @@ signal left_data, right_data : STD_LOGIC_VECTOR (3 downto 0);
 -- ---------- flag ----------
 signal flag6 : STD_LOGIC := '0';            -- flag for if it is 6 phase or not
 signal memFlag : STD_LOGIC := '0';          -- flag for execute again or not
+constant PC_max : UNSIGNED(8 downto 0) := "000101001";            -- maximum program counter value
 --signal exCount : integer := 0;              -- counts number of executes gone through
 
 -- ---------- DEB -----------
@@ -251,10 +252,18 @@ begin
 		                elsif(Is4Phase(DATA)) then
 						   PC <= PC + 1;
 						   temp := temp + 1;
+						   if (PC > PC_max) then
+						      PC <= "000000000";
+						      temp := 0;
+						   end if;
 						   CurrState <= Operand;
 						elsif(Is6Phase(DATA)) then
 						   PC <= PC + 1;
 						   temp := temp + 1;
+						   if (PC > PC_max) then
+                              PC <= "000000000";
+                              temp := 0;
+                           end if;
 						   CurrState <= Operand;
 						   flag6 <= '1';
 					    else
@@ -275,6 +284,10 @@ begin
                            else
                               PC <= PC + 1;
                               temp := temp +1;
+                              if (PC > PC_max) then
+                                 PC <= "000000000";
+                                 temp := 0;
+                              end if;
                            end if;
                            
                            CurrState <= Fetch;
@@ -295,6 +308,10 @@ begin
                               else
                                  PC <= PC + 1;
                                  temp := temp +1;
+                                 if (PC > PC_max) then
+                                    PC <= "000000000";
+                                    temp := 0;
+                                 end if;
                               end if;
 					       CurrState <= Fetch;
 					     end if;
